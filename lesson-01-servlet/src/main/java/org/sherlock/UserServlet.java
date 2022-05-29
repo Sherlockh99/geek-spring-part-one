@@ -40,48 +40,52 @@ public class UserServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         if(req.getPathInfo()==null || req.getPathInfo().equals("/")) {
-            PrintWriter wr = resp.getWriter();
-            wr.println("<table>");
-            wr.println("<tr>");
-            wr.println("<th>Id</th>");
-            wr.println("<th>Username</th>");
-            wr.println("</tr>");
-
-            for (User user : userRepository.findAll()) {
-                wr.println("<tr>");
-                wr.println("<td><a href='" + req.getContextPath() + "/user/" + user.getId() + "'>" + user.getId() + "</a></td>");
-                wr.println("<td>" + user.getUsername() + "</td>");
-                wr.println("</tr>");
-            }
-
-            wr.println("</table>");
-        } else {
-            Matcher matcher = PARAM_PATERN.matcher(req.getPathInfo());
-
-            /**
-             * проверяем, если строка соответствует регулярному выражению
-              */
-            if(matcher.matches()){
-                /**
-                 * распарсим строку
-                 * и получим первое значение,
-                 * которое указано в первых скобках в переменной PARAM_PATERN
-                 * group(0) - Это вся строка целиком
-                 * если больше скобок, то указывая номер скобки, получим это выражение
-                 */
-                long id = Long.parseLong(matcher.group(1));
-                User user = userRepository.findById(id);
-                if(user == null){
-                    resp.getWriter().println("User not found");
-                    resp.setStatus(404);
-                    return;
-                }
-                resp.getWriter().println("<p>Id: " + user.getId() + "</p>");
-                resp.getWriter().println("<p>Username: " + user.getUsername() + "</p>");
-            }else{
-                resp.getWriter().println("Bad parameter value");
-                resp.setStatus(400);
-            }
+            req.setAttribute("users",userRepository.findAll());
+            getServletContext().getRequestDispatcher("/user.jsp").forward(req,resp); //для дальнейшей обработки перекинь на user.jsp
         }
+//        if(req.getPathInfo()==null || req.getPathInfo().equals("/")) {
+//            PrintWriter wr = resp.getWriter();
+//            wr.println("<table>");
+//            wr.println("<tr>");
+//            wr.println("<th>Id</th>");
+//            wr.println("<th>Username</th>");
+//            wr.println("</tr>");
+//
+//            for (User user : userRepository.findAll()) {
+//                wr.println("<tr>");
+//                wr.println("<td><a href='" + req.getContextPath() + "/user/" + user.getId() + "'>" + user.getId() + "</a></td>");
+//                wr.println("<td>" + user.getUsername() + "</td>");
+//                wr.println("</tr>");
+//            }
+//
+//            wr.println("</table>");
+//        } else {
+//            Matcher matcher = PARAM_PATERN.matcher(req.getPathInfo());
+//
+//            /**
+//             * проверяем, если строка соответствует регулярному выражению
+//              */
+//            if(matcher.matches()){
+//                /**
+//                 * распарсим строку
+//                 * и получим первое значение,
+//                 * которое указано в первых скобках в переменной PARAM_PATERN
+//                 * group(0) - Это вся строка целиком
+//                 * если больше скобок, то указывая номер скобки, получим это выражение
+//                 */
+//                long id = Long.parseLong(matcher.group(1));
+//                User user = userRepository.findById(id);
+//                if(user == null){
+//                    resp.getWriter().println("User not found");
+//                    resp.setStatus(404);
+//                    return;
+//                }
+//                resp.getWriter().println("<p>Id: " + user.getId() + "</p>");
+//                resp.getWriter().println("<p>Username: " + user.getUsername() + "</p>");
+//            }else{
+//                resp.getWriter().println("Bad parameter value");
+//                resp.setStatus(400);
+//            }
+//        }
     }
 }
