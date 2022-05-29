@@ -1,3 +1,5 @@
+<%@ page import="org.sherlock.persists.User" %>
+<%@ page import="java.util.List" %>
 <!doctype html>
 <html lang="en">
 
@@ -55,14 +57,17 @@ http://localhost:8080/servlet-app/user.jsp
                 </thead>
                 <tbody>
 
+                <% for (User user: (List<User>) request.getAttribute("users")) {%>
+
                 <tr>
-                    <th scope="row">1</th>
-                    <td>Alex</td>
+                    <th scope="row"><%=user.getId()%> 1</th>
+                    <td><%=user.getUsername()%></td>
                     <td>
                         <a class="btn btn-success" href="user_form.html"><i class="fas fa-edit"></i></a>
                         <a class="btn btn-danger" href="#"><i class="far fa-trash-alt"></i></a>
                     </td>
                 </tr>
+                <% } %>
                 </tbody>
             </table>
         </div>
