@@ -17,6 +17,12 @@ public class FirstHttpServletNew extends HttpServlet {
          * http://localhost:8080/servlet-app/first_http_servlet_new/aaafgh/lll?var1=aaa&var2=bbb
          * http://localhost:8080/servlet-app/first_http_servlet_new/aaafgh/lll?param1=aaa&param2=bbb
          */
+
+        /*
+        resp.setContentType("text/html");
+        resp.setCharacterEncoding("utf-8");
+        */
+
         resp.getWriter().println("<p>contextPath: " + req.getContextPath() + "</p>");
         resp.getWriter().println("<p>servletPath: " + req.getServletPath() + "</p>");
         resp.getWriter().println("<p>pathInfo: " + req.getPathInfo() + "</p>");
