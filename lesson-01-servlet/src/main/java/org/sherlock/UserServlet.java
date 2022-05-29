@@ -50,8 +50,8 @@ public class UserServlet extends HttpServlet {
             for (User user : userRepository.findAll()) {
 
                 wr.println("<tr>");
-                wr.println("<th>" + user.getId() + "</th>");
-                wr.println("<th>" + user.getUsername() + "</th>");
+                wr.println("<td><a href='user/" + user.getId() + "'>" + user.getId() + "</a></td>");
+                wr.println("<td>" + user.getUsername() + "</td>");
                 wr.println("</tr>");
 
             }
