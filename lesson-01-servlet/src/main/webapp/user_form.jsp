@@ -1,13 +1,6 @@
 <%@ page import="org.sherlock.persists.User" %>
-<%@ page import="java.util.List" %>
 <!doctype html>
 <html lang="en">
-
-<!--
-http://localhost:8080/servlet-app/user.jsp
-
-см. c:\Programming\apache-tomcat-9.0.63\work\Catalina\localhost\servlet-app\org\apache\jsp\
--->
 
 <head>
     <!-- Required meta tags -->
@@ -43,35 +36,16 @@ http://localhost:8080/servlet-app/user.jsp
 <div class="container">
     <div class="row py-2">
         <div class="col-12">
-            <a class="btn btn-primary" href="user_form.jsp">Add User</a>
-        </div>
+            <form action="#" method="post">
+                <input type="hidden" id="id" name="id">
+                <div class="form-group">
+                    <% User user = (User) request.getAttribute("user"); %>
 
-        <div class="col-12">
-            <table class="table table-bordered my-2">
-                <thead>
-                <tr>
-                    <th scope="col">Id</th>
-                    <th scope="col">Username</th>
-                    <th scope="col">Actions</th>
-                </tr>
-                </thead>
-                <tbody>
-
-                <% String contentPath = (String) request.getAttribute("contentPath");
-                    for (User user: (List<User>) request.getAttribute("users")) {%>
-
-                <tr>
-                    <th scope="row"><%=user.getId()%> 1</th>
-                    <td><%=user.getUsername()%></td>
-                    <td>
-                        <a class="btn btn-success" href="user_form.jsp"><i class="fas fa-edit"></i></a>
-                        <a class="btn btn-success" href="userNew/<%=user.getId()%>"><i class="fas fa-edit"></i></a>
-                        <a class="btn btn-danger" href="#"><i class="far fa-trash-alt"></i></a>
-                    </td>
-                </tr>
-                <% } %>
-                </tbody>
-            </table>
+                    <label>Username</label>
+                    <input type="text" class="form-control" id="name" name="username" placeholder="Enter username" value="<%=user.getUsername()%>">
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
         </div>
     </div>
 </div>
@@ -87,5 +61,7 @@ http://localhost:8080/servlet-app/user.jsp
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
+
 </body>
+
 </html>

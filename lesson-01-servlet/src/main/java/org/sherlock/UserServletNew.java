@@ -9,12 +9,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@WebServlet(urlPatterns = "/user/*")
-public class UserServlet extends HttpServlet {
+@WebServlet(urlPatterns = "/userNew/*")
+public class UserServletNew extends HttpServlet {
 
 
     /**
@@ -39,37 +38,12 @@ public class UserServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
         if(req.getPathInfo()==null || req.getPathInfo().equals("/")) {
-            PrintWriter wr = resp.getWriter();
-            wr.println("<table>");
-            wr.println("<tr>");
-            wr.println("<th>Id</th>");
-            wr.println("<th>Username</th>");
-            wr.println("</tr>");
-
-            for (User user : userRepository.findAll()) {
-                wr.println("<tr>");
-                wr.println("<td><a href='" + req.getContextPath() + "/user/" + user.getId() + "'>" + user.getId() + "</a></td>");
-                wr.println("<td>" + user.getUsername() + "</td>");
-                wr.println("</tr>");
-            }
-
-            wr.println("</table>");
-        } else {
+            req.setAttribute("users",userRepository.findAll());
+            getServletContext().getRequestDispatcher("/user.jsp").forward(req,resp); //для дальнейшей обработки перекинь на user.jsp
+        }else {
             Matcher matcher = PARAM_PATTERN.matcher(req.getPathInfo());
-
-            /**
-             * проверяем, если строка соответствует регулярному выражению
-              */
             if(matcher.matches()){
-                /**
-                 * распарсим строку
-                 * и получим первое значение,
-                 * которое указано в первых скобках в переменной PARAM_PATTERN
-                 * group(0) - Это вся строка целиком
-                 * если больше скобок, то указывая номер скобки, получим это выражение
-                 */
                 long id = Long.parseLong(matcher.group(1));
                 User user = userRepository.findById(id);
                 if(user == null){
@@ -77,8 +51,9 @@ public class UserServlet extends HttpServlet {
                     resp.setStatus(404);
                     return;
                 }
-                resp.getWriter().println("<p>Id: " + user.getId() + "</p>");
-                resp.getWriter().println("<p>Username: " + user.getUsername() + "</p>");
+                req.setAttribute("user",user);
+                req.setAttribute("contentPath",req.getContextPath());
+                getServletContext().getRequestDispatcher("/user_form.jsp").forward(req,resp); //для дальнейшей обработки перекинь на user_form.jsp
             }else{
                 resp.getWriter().println("Bad parameter value");
                 resp.setStatus(400);
